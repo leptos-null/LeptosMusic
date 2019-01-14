@@ -1,0 +1,5 @@
+# InnerTube Access Token, private
+music/Services/LMPrivateGoogleAccessToken.h
+
+# The protobuf messages are currently private
+LMYTIGeneratedProtobufs/

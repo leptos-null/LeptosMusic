@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:music.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:protobuf-3.5.1/objectivec/ProtocolBuffers_iOS.xcodeproj">
+   </FileRef>
+</Workspace>

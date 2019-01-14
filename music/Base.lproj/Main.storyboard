@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Main Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" userLabel="Main Controller" customClass="LMViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OGS-hu-XOq" customClass="MPVolumeView">
+                                <rect key="frame" x="12" y="28" width="351" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="Nu9-pZ-Xam"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="showsRouteButton" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cps-5l-5RM">
+                                <rect key="frame" x="4" y="54" width="367" height="183.5"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SyS-U5-Fi0" customClass="LMVideoPlayerView">
+                                        <rect key="frame" x="0.0" y="0.0" width="367" height="183.5"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v1P-ts-oAj" customClass="DPHistogramEqualizerView">
+                                        <rect key="frame" x="0.0" y="0.0" width="367" height="183.5"/>
+                                        <gestureRecognizers/>
+                                    </view>
+                                    <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" translatesAutoresizingMaskIntoConstraints="NO" id="w0e-VO-TZ1">
+                                        <rect key="frame" x="0.0" y="0.0" width="367" height="183.5"/>
+                                    </mtkView>
+                                </subviews>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="v1P-ts-oAj" secondAttribute="bottom" id="44o-SB-lxV"/>
+                                    <constraint firstAttribute="trailing" secondItem="SyS-U5-Fi0" secondAttribute="trailing" id="5o2-0z-uvb"/>
+                                    <constraint firstAttribute="width" secondItem="Cps-5l-5RM" secondAttribute="height" multiplier="2:1" priority="850" id="64L-ZX-GIw"/>
+                                    <constraint firstAttribute="trailing" secondItem="v1P-ts-oAj" secondAttribute="trailing" id="Eam-JK-hIO"/>
+                                    <constraint firstItem="v1P-ts-oAj" firstAttribute="leading" secondItem="Cps-5l-5RM" secondAttribute="leading" id="Fhw-s0-GR2"/>
+                                    <constraint firstAttribute="trailing" secondItem="w0e-VO-TZ1" secondAttribute="trailing" id="TRZ-f9-X3r"/>
+                                    <constraint firstItem="w0e-VO-TZ1" firstAttribute="top" secondItem="Cps-5l-5RM" secondAttribute="top" id="Xc4-h1-bdt"/>
+                                    <constraint firstItem="SyS-U5-Fi0" firstAttribute="leading" secondItem="Cps-5l-5RM" secondAttribute="leading" id="Zez-fy-njE"/>
+                                    <constraint firstItem="SyS-U5-Fi0" firstAttribute="top" secondItem="Cps-5l-5RM" secondAttribute="top" id="auH-N3-pxI"/>
+                                    <constraint firstItem="w0e-VO-TZ1" firstAttribute="leading" secondItem="Cps-5l-5RM" secondAttribute="leading" id="c4Y-VN-zuT"/>
+                                    <constraint firstAttribute="bottom" secondItem="w0e-VO-TZ1" secondAttribute="bottom" id="niu-rd-CNA"/>
+                                    <constraint firstAttribute="bottom" secondItem="SyS-U5-Fi0" secondAttribute="bottom" id="qV2-0q-mkS"/>
+                                    <constraint firstItem="v1P-ts-oAj" firstAttribute="top" secondItem="Cps-5l-5RM" secondAttribute="top" id="qXn-1d-6mT"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="YfL-6W-zcf" appends="YES" id="ORs-DP-eMR"/>
+                                    <outletCollection property="gestureRecognizers" destination="a06-JX-NX4" appends="YES" id="ad0-so-mYC"/>
+                                </connections>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ouc-5m-DdI">
+                                <rect key="frame" x="4" y="255.5" width="367" height="411.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="separatorColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PlaylistCell" textLabel="oCa-Xt-CmN" detailTextLabel="Z1f-gy-3TH" style="IBUITableViewCellStyleSubtitle" id="dlr-3b-Nd5">
+                                        <rect key="frame" x="0.0" y="28" width="367" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dlr-3b-Nd5" id="40x-KE-KVs">
+                                            <rect key="frame" x="0.0" y="0.0" width="367" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oCa-Xt-CmN">
+                                                    <rect key="frame" x="15" y="4" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z1f-gy-3TH">
+                                                    <rect key="frame" x="15" y="24.5" width="47" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="highlightedColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SearchCell" rowHeight="52" id="0En-c6-XB1">
+                                        <rect key="frame" x="0.0" y="72" width="367" height="52"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0En-c6-XB1" id="RVg-GP-xTR">
+                                            <rect key="frame" x="0.0" y="0.0" width="367" height="51.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search Music" translatesAutoresizingMaskIntoConstraints="NO" id="VUy-K0-N5q">
+                                                    <rect key="frame" x="0.0" y="0.0" width="367" height="51.5"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="yes" keyboardAppearance="alert" returnKeyType="search"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="BYZ-38-t0r" id="KFa-Xl-Et7"/>
+                                                    </connections>
+                                                </searchBar>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="VUy-K0-N5q" secondAttribute="bottom" id="5we-PV-XXp"/>
+                                                <constraint firstItem="VUy-K0-N5q" firstAttribute="top" secondItem="RVg-GP-xTR" secondAttribute="top" id="erf-f2-WHv"/>
+                                                <constraint firstItem="VUy-K0-N5q" firstAttribute="leading" secondItem="RVg-GP-xTR" secondAttribute="leading" id="kFW-dd-feG"/>
+                                                <constraint firstAttribute="trailing" secondItem="VUy-K0-N5q" secondAttribute="trailing" id="lZQ-Wp-aqu"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                </prototypes>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="sEM-2l-OOi"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="rP9-ZD-eal"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Ouc-5m-DdI" firstAttribute="top" secondItem="Cps-5l-5RM" secondAttribute="bottom" constant="18" id="Anp-i9-Vvh"/>
+                            <constraint firstItem="Ouc-5m-DdI" firstAttribute="leading" secondItem="Cps-5l-5RM" secondAttribute="leading" id="Jv1-BC-dqP"/>
+                            <constraint firstItem="OGS-hu-XOq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="Lc9-jG-RpV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ouc-5m-DdI" secondAttribute="trailing" constant="4" id="RzH-XA-SWB"/>
+                            <constraint firstItem="Cps-5l-5RM" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-12" id="TMV-NE-G3I"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ouc-5m-DdI" secondAttribute="bottom" priority="750" id="Tmx-IO-NXL"/>
+                            <constraint firstItem="Cps-5l-5RM" firstAttribute="top" secondItem="OGS-hu-XOq" secondAttribute="bottom" constant="4" id="VmT-4c-m4C"/>
+                            <constraint firstItem="Ouc-5m-DdI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="XUX-zl-l8C"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OGS-hu-XOq" secondAttribute="trailing" constant="12" id="b6a-Xy-oyR"/>
+                            <constraint firstItem="OGS-hu-XOq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="cMb-Uh-jbY"/>
+                            <constraint firstItem="Ouc-5m-DdI" firstAttribute="trailing" secondItem="Cps-5l-5RM" secondAttribute="trailing" id="vdq-cn-aPZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="equalizerView" destination="v1P-ts-oAj" id="9Rh-aV-jT0"/>
+                        <outlet property="metalView" destination="w0e-VO-TZ1" id="VbL-1Z-Plv"/>
+                        <outlet property="playerView" destination="SyS-U5-Fi0" id="BOt-2o-rr2"/>
+                        <outlet property="playlistTableView" destination="Ouc-5m-DdI" id="AOO-HL-uKS"/>
+                        <outlet property="visualizeHoldingView" destination="Cps-5l-5RM" id="xuS-U9-ovk"/>
+                        <outlet property="volumeView" destination="OGS-hu-XOq" id="L28-tA-dqk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="up" id="YfL-6W-zcf" userLabel="Swipe Up Gesture Recognizer">
+                    <connections>
+                        <action selector="_switchVisualType:" destination="BYZ-38-t0r" id="TDM-LW-bt8"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="down" id="a06-JX-NX4" userLabel="Swipe Down Gesture Recognizer">
+                    <connections>
+                        <action selector="_switchVisualType:" destination="BYZ-38-t0r" id="GXh-zG-JXD"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+        </scene>
+    </scenes>
+</document>
