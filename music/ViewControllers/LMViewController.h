@@ -25,12 +25,16 @@
 @property (strong, nonatomic) IBOutlet DPMainEqualizerView *equalizerView;
 /// View used for @c LMPreferencesVisualizerTypeMetal
 @property (strong, nonatomic) IBOutlet MTKView *metalView;
-
+/// Table view populated with valid playlist endpoints.
+/// Search results are displayed at the top of this table depending on @c shouldShowSearchResults
 @property (strong, nonatomic) IBOutlet UITableView *playlistTableView;
-
+/// Search bar, dynamicly set. Should be in the first cell of @c playlistTableView
 @property (weak, nonatomic) UISearchBar *cellSearchBar;
 
+/// Whether search results should be displayed in the @c playlistTableView
+/// and determines direction of the search bar arrow indicator
 @property (nonatomic) BOOL shouldShowSearchResults;
+/// Whether incoming music data should be processed, and visualizing views should be updated
 @property (nonatomic) BOOL shouldUpdateVisualizer;
 
 @end

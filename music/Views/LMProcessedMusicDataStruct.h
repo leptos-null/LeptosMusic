@@ -9,17 +9,25 @@
 #ifndef LMProcessedMusicDataStruct_h
 #define LMProcessedMusicDataStruct_h
 
+/// Calculated values from an audio frame buffer
 struct LMProcessedMusicData {
-    float rmesq; // root-mean-square
+    /// root-mean-square
+    float rmesq;
     
-    float meamg; // mean magnitude
-    float measq; // mean square
+    /// mean magnitude
+    float meamg;
+    /// mean square
+    float measq;
     
-    float maxvl; // maximum value
-    float maxmg; // maximum magnitude
+    /// maximum value
+    float maxvl;
+    /// maximum magnitude
+    float maxmg;
     
-    float minvl; // minimum value
-    float minmg; // minimum magnitude
+    /// minimum value
+    float minvl;
+    /// minimum magnitude
+    float minmg;
 };
 
 #endif /* LMProcessedMusicDataStruct_h */

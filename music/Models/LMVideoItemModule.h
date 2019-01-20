@@ -12,9 +12,12 @@
 #import "LMInnerTubeRequest.h"
 
 typedef NS_ENUM(NSInteger, LMVideoLikedStatus) {
-    LMVideoLikedStatusNone, /// No thumb
-    LMVideoLikedStatusUp,   /// Thumb up
-    LMVideoLikedStatusDown, /// Thumb down
+    /// No thumb
+    LMVideoLikedStatusNone,
+    /// Thumb up
+    LMVideoLikedStatusUp,
+    /// Thumb down
+    LMVideoLikedStatusDown,
 };
 
 @interface LMVideoItemModule : NSObject
@@ -43,6 +46,7 @@ typedef NS_ENUM(NSInteger, LMVideoLikedStatus) {
 
 - (instancetype)initWithWatchpoint:(YTIWatchEndpoint *)watchpoint;
 - (void)requestPlayerResponse:(void(^)(YTIPlayerResponse *response, NSError *error))responseHandler;
+
 /// Current player metadata of the receiver. Used for Now Playing Info Center
 - (NSDictionary<NSString *, id> *)playerMetadata;
 

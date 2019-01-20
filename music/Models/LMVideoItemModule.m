@@ -23,7 +23,7 @@
     return self;
 }
 
-- (void)requestPlayerResponse:(void (^)(YTIPlayerResponse *, NSError *))responseHandler {
+- (void)requestPlayerResponse:(void(^)(YTIPlayerResponse *, NSError *))responseHandler {
     YTIPlayerRequest *playerReq = [YTIPlayerRequest message];
     playerReq.context.client = [LMProtobufFactory currentClientInfo];
     

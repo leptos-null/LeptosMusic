@@ -26,7 +26,9 @@ typedef void(^NSURLSessionTaskCompletionBlock)(NSData *data, NSURLResponse *resp
 
 /// A session object with the given request. The completion handler will be called asynchronously after @c complete is called
 + (instancetype)sessionWithRequest:(NSMutableURLRequest *)request completion:(NSURLSessionTaskCompletionBlock)completion;
+/// A session object with the given request. The completion handler will be called asynchronously after @c complete is called
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request completion:(NSURLSessionTaskCompletionBlock)completion;
+
 /// Start the process of signing, authorizing, and making the request.
 - (void)complete;
 

@@ -12,10 +12,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    if (@available(iOS 11.0, *)) {
-        /* not required, comment out if you're not using the Multipath entitlement */
-        NSURLSession.sharedSession.configuration.multipathServiceType = NSURLSessionMultipathServiceTypeHandover;
-    }
     return YES;
 }
 

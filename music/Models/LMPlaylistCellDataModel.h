@@ -10,8 +10,11 @@
 
 @interface LMPlaylistCellDataModel : NSObject
 
+/// Title for the cell. Typically the title of the first playlist item
 @property (strong, nonatomic, readonly) NSString *title;
+/// Subtitle for the cell. Typically the media type of the first playlist item, e.g. "Song", "Video"
 @property (strong, nonatomic, readonly) NSString *subTitle;
+/// A playlist watch endpoint
 @property (strong, nonatomic, readonly) YTIWatchPlaylistEndpoint *endpoint;
 
 + (instancetype)modelWithTitle:(NSString *)title endpoint:(YTIWatchPlaylistEndpoint *)endpoint;

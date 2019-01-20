@@ -10,12 +10,15 @@
 
 #import "../Services/LMInnerTubeSession.h"
 
+NSErrorDomain const LMInnerTubeRequestErrorDomain = @"null.leptos.music.innertube.request";
+
 @implementation LMInnerTubeRequest {
     LMInnerTubeSession *_runSession;
 }
 
 - (void)completeRequestWithCompletion:(void(^)(__kindof GPBMessage *message, NSError *error))completion {
     Class targetClass = self.responseClass;
+    __block id retainInc = self;
     
     NSData *messageData = self.message.data;
     
@@ -24,7 +27,7 @@
     request.HTTPBody = messageData;
     [request setValue:@(messageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-protobuf" forHTTPHeaderField:@"Content-Type"];
-    
+
     LMInnerTubeSession *session = [LMInnerTubeSession sessionWithRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (completion) {
             if (error) {
@@ -38,8 +41,9 @@
                             NSError *customError = [NSError errorWithDomain:@"com.googleapis.youtubei.request" code:1 userInfo:errMessage];
                             completion(nil, customError);
                         } else {
-                            NSError *customError = [NSError errorWithDomain:@"null.leptos.music.innertube.request" code:1 userInfo:@{
-                                @"message" : @"Unknown error"
+                            NSError *customError = [NSError errorWithDomain:LMInnerTubeRequestErrorDomain code:1 userInfo:@{
+                                NSLocalizedDescriptionKey : @"Unknown error",
+                                NSLocalizedFailureReasonErrorKey : @"Response object is not a Protobuf Message or JSON"
                             }];
                             completion(nil, customError);
                         }
@@ -47,17 +51,20 @@
                         completion(message, nil);
                     }
                 } else {
-                    NSError *customError = [NSError errorWithDomain:@"null.leptos.music.innertube.request" code:1 userInfo:@{
-                        @"message" : @"responseClass must be a GPBMessage subclass"
+                    @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"responseClass must be a GPBMessage subclass" userInfo:@{
+                        @"responseClass" : (NSStringFromClass(targetClass) ?: @"(NULL)")
                     }];
-                    completion(nil, customError);
                 }
             } else {
-                NSError *customError = [NSError errorWithDomain:@"null.leptos.music.innertube.request" code:1 userInfo:@{
-                    @"message" : @"Unknown error"
+                NSError *customError = [NSError errorWithDomain:LMInnerTubeRequestErrorDomain code:1 userInfo:@{
+                    NSLocalizedDescriptionKey : @"Unknown error",
+                    NSLocalizedFailureReasonErrorKey : @"Both data and error are nil after completing network request"
                 }];
                 completion(nil, customError);
             }
+        }
+        if (retainInc) { /* silence dead store analyzer warning */
+            retainInc = nil;
         }
     }];
     [session complete];

@@ -13,6 +13,8 @@
 
 #define LMRequestCryptoManagerApiaryUserDefaultsKey @"LMRequestCryptoManagerApiaryUserDefaultsKey"
 
+NSErrorDomain const LMCryptoManagerErrorDomain = @"null.leptos.music.cryptomanager";
+
 @implementation LMRequestCryptoManager {
     LMApiaryDeviceCrypto *_crypto;
     NSMutableArray<LMRequestCryptoManagerReadyCallback> *_readyCallbacks;
@@ -47,13 +49,7 @@
             __weak typeof(self) weakself = self;
             [self _setupDeviceCrypto:crypto completion:^(NSError *error) {
                 if (!error) {
-                    if (weakself) {
-                        typeof(self) strongself = weakself;
-                        strongself->_ready = YES;
-                        for (LMRequestCryptoManagerReadyCallback callback in strongself->_readyCallbacks) {
-                            callback();
-                        }
-                    }
+                    weakself.ready = YES;
                     
                     NSData *archive = nil;
                     if (@available(iOS 11.0, *)) {
@@ -62,11 +58,22 @@
                         archive = [NSKeyedArchiver archivedDataWithRootObject:crypto];
                     }
                     [NSUserDefaults.standardUserDefaults setObject:archive forKey:LMRequestCryptoManagerApiaryUserDefaultsKey];
+                } else {
+                    NSLog(@"_setupDeviceCryptoError: %@", error);
                 }
             }];
         }
     }
     return self;
+}
+
+- (void)setReady:(BOOL)ready {
+    _ready = ready;
+    if (ready) {
+        for (LMRequestCryptoManagerReadyCallback callback in _readyCallbacks) {
+            callback();
+        }
+    }
 }
 
 - (void)_setupDeviceCrypto:(LMApiaryDeviceCrypto *)crypto completion:(void(^)(NSError *error))completion {
@@ -87,9 +94,10 @@
             if (parsedTree) {
                 [crypto setDeviceID:parsedTree[@"id"] deviceKey:parsedTree[@"key"] error:&error];
             } else {
-                error = [NSError errorWithDomain:@"null.leptos.music.cryptomanager" code:1 userInfo:@{
-                    @"message" : @"Unknown server response, registering device",
-                    @"response" : (data ?: @"(NULL)")
+                error = [NSError errorWithDomain:LMCryptoManagerErrorDomain code:1 userInfo:@{
+                    NSLocalizedDescriptionKey : @"Unknown server response while registering device",
+                    NSLocalizedFailureReasonErrorKey : @"Expected JSON response from server",
+                    NSUnderlyingErrorKey : error
                 }];
             }
         }
@@ -104,8 +112,9 @@
         return [_crypto signURLRequest:request error:error];
     } else {
         if (error) {
-            *error = [NSError errorWithDomain:@"null.leptos.music.cryptomanager" code:1 userInfo:@{
-                @"message" : @"DeviceCrypto is not yet ready"
+            *error = [NSError errorWithDomain:LMCryptoManagerErrorDomain code:1 userInfo:@{
+                NSLocalizedDescriptionKey : @"DeviceCrypto is not yet ready",
+                NSLocalizedFailureReasonErrorKey : @"Attempted to use CryptoManger before it was ready"
             }];
         }
         return NO;

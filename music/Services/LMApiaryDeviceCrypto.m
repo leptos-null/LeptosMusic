@@ -8,7 +8,6 @@
 #import <CommonCrypto/CommonCrypto.h>
 
 #import "LMApiaryDeviceCrypto.h"
-#import "GTMStringEncoding.h"
 
 #define kYTApiaryDeviceCryptoDeviceIdKey  @"kYTApiaryDeviceCryptoDeviceIdKey"
 #define kYTApiaryDeviceCryptoDeviceKeyKey @"kYTApiaryDeviceCryptoDeviceKeyKey"
@@ -19,6 +18,11 @@
 @interface NSError (LMNetCryptoError)
 + (instancetype)netCryptoErrorWithMessage:(NSString *)message;
 @end
+
+static const uint8_t kEncryptionLeadByte = 83;
+_Static_assert(sizeof(kEncryptionLeadByte) == 1, "kEncryptionLeadByte must be exactly one byte");
+
+static NSString *const kBase64PadCharacter = @"=";
 
 @implementation LMApiaryDeviceCrypto {
     NSString *_deviceID;
@@ -96,36 +100,38 @@
     }
     [newData appendBytes:sha1Digest length:appendLength];
     
-    GTMStringEncoding *stringEncoder = [GTMStringEncoding rfc4648Base64StringEncoding];
-    stringEncoder.doPad = NO;
-    return [stringEncoder encode:newData error:NULL];
+    NSString *encodedStr = [newData base64EncodedStringWithOptions:0];
+    encodedStr = [encodedStr stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:kBase64PadCharacter]];
+    return encodedStr;
 }
 
 - (NSData *)performCrypto:(NSData *)data outputLength:(NSUInteger)length IV:(NSData *)iv operation:(CCOperation)op {
-    CCCryptorRef cryptor;
+    CCCryptorRef cryptor = NULL;
     CCCryptorStatus status = CCCryptorCreateWithMode(op, kCCModeCTR, kCCAlgorithmAES, ccNoPadding,
                                                      iv.bytes, _projectKey.bytes, 0x10, NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
     if (status == kCCSuccess) {
         size_t cryptorLen = CCCryptorGetOutputLength(cryptor, data.length, true);
-        NSMutableData *ret = [NSMutableData dataWithLength:cryptorLen];
-        size_t dataMoved;
-        status = CCCryptorUpdate(cryptor, data.bytes, data.length, ret.mutableBytes, cryptorLen, &dataMoved);
+        NSAssert(cryptorLen > length, @"Truncation length must not be larger than original length");
+        char outBytes[cryptorLen];
+        size_t dataMoved = 0;
+        status = CCCryptorUpdate(cryptor, data.bytes, data.length, outBytes, cryptorLen, &dataMoved);
         if (status == kCCSuccess) {
-            // CCCryptorRelease(cryptor); /* original has this, but cryptor is on the stack? */
-            ret.length = length;
-            return [ret copy];
+            CCCryptorRelease(cryptor);
+            return [NSData dataWithBytes:outBytes length:length];
         }
     }
     return nil;
 }
 
 - (NSData *)paddedData:(NSData *)data {
+    NSUInteger const alignment = 0x10;
     NSUInteger dataLength = data.length;
-    NSUInteger lengthMod = dataLength & 0xf;
+    NSUInteger lengthMod = dataLength % alignment;
     if (lengthMod) {
-        NSMutableData *padData = [NSMutableData dataWithLength:dataLength + 0x10 - lengthMod];
+        /* I don't think this is how data is normally padded */
+        NSMutableData *padData = [NSMutableData dataWithLength:dataLength + alignment - lengthMod];
         [padData replaceBytesInRange:NSMakeRange(0, dataLength) withBytes:data.bytes];
-        return [padData copy]; /* copy call not in original */
+        return [padData copy];
     } else {
         return data;
     }
@@ -146,8 +152,10 @@
 }
 
 - (NSData *)decryptEncodedString:(NSString *)encodedString error:(NSError **)error {
-    GTMStringEncoding *strEnc = [GTMStringEncoding rfc4648Base64StringEncoding];
-    NSData *decoded = [strEnc decode:encodedString error:error];
+    NSUInteger encodedStringPadLength = (encodedString.length + encodedString.length % 4); /* Darwin Foundation requires padding */
+    encodedString = [encodedString stringByPaddingToLength:encodedStringPadLength withString:kBase64PadCharacter startingAtIndex:0];
+    NSData *decoded = [[NSData alloc] initWithBase64EncodedString:encodedString options:0];
+    
     uint8_t firstByte;
     [decoded getBytes:&firstByte length:sizeof(firstByte)];
     if (firstByte == 0) {
@@ -189,16 +197,14 @@
         [mutData appendData:crypto];
         NSMutableData *moreData = [NSMutableData dataWithLength:mutData.length + 9];
         
-        uint8_t magicByte = 83;
-        [moreData replaceBytesInRange:NSMakeRange(0, 1) withBytes:&magicByte];
+        [moreData replaceBytesInRange:NSMakeRange(0, sizeof(kEncryptionLeadByte)) withBytes:&kEncryptionLeadByte];
         [moreData replaceBytesInRange:NSMakeRange(9, mutData.length) withBytes:mutData.bytes];
         
         uint8_t sha1Digest[CC_SHA1_DIGEST_LENGTH];
         CCHmac(kCCHmacAlgSHA1, _hmacKey.bytes, (size_t)_hmacKey.length, moreData.bytes, moreData.length, sha1Digest);
         [mutData appendBytes:sha1Digest length:_hmacLength];
         
-        GTMStringEncoding *strEncode = [GTMStringEncoding rfc4648Base64StringEncoding];
-        return [strEncode encode:mutData error:error];
+        return [mutData base64EncodedStringWithOptions:0];
     } else if (error) {
         *error = [NSError netCryptoErrorWithMessage:@"Generic crypto error."];
     }
@@ -214,8 +220,7 @@
             NSData *lowData = [data subdataWithRange:NSMakeRange(0, lengthDiff)];
             NSMutableData *mutData = [NSMutableData dataWithLength:lengthDiff + 9];
             
-            uint8_t magicByte = 83;
-            [mutData replaceBytesInRange:NSMakeRange(0, 1) withBytes:&magicByte];
+            [mutData replaceBytesInRange:NSMakeRange(0, sizeof(kEncryptionLeadByte)) withBytes:&kEncryptionLeadByte];
             [mutData replaceBytesInRange:NSMakeRange(9, lengthDiff) withBytes:lowData.bytes];
             
             uint8_t hmacBytes[CC_SHA1_DIGEST_LENGTH];
@@ -235,7 +240,6 @@
         _deviceKey  = [aDecoder decodeObjectForKey:kYTApiaryDeviceCryptoDeviceKeyKey];
         _projectKey = [aDecoder decodeObjectForKey:kYTDeviceCryptoProjectKeyKey];
         _hmacKey    = [aDecoder decodeObjectForKey:kYTDeviceCryptoHMACKeyKey];
-        /* Original uses decodeIntForKey, which is not optimal here */
         _hmacLength = [aDecoder decodeIntegerForKey:kYTDeviceCryptoHMACLengthKey];
     }
     return self;

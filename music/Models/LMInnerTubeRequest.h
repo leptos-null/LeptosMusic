@@ -11,6 +11,8 @@
 #import "../../LMYTIGeneratedProtobufs/LMYTIGeneratedProtobufs.h"
 #import "LMInnerTubeURLBuilder.h"
 
+FOUNDATION_EXPORT NSErrorDomain const LMInnerTubeRequestErrorDomain;
+
 @interface LMInnerTubeRequest : NSObject
 /// The message to be sent in the request body
 @property (strong, nonatomic) __kindof GPBMessage *message;
